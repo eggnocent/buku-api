@@ -24,15 +24,31 @@ func main() {
 
 	bookRepository := book.NewRepository(db)
 
-	bukus, err := bookRepository.FindAll()
-	if err != nil {
-		fmt.Println("Error retrieving books:", err)
-		return
+	// FIND ALL
+	// bukus, err := bookRepository.FindAll()
+	// if err != nil {
+	// 	fmt.Println("Error retrieving books:", err)
+	// 	return
+	// }
+
+	// for _, b := range bukus {
+	// 	fmt.Println("Title:", b.Judul)
+	// }
+
+	//FIND BY ID
+	// bukus, err := bookRepository.FindByID(3)
+
+	// fmt.Println("Judul: ", bukus.Judul)
+
+	buku := book.Buku{
+		Judul:     "Dengarkan Tanah",
+		Deskripsi: "dari dongker",
+		Harga:     120000,
+		Rating:    4,
+		Diskon:    10,
 	}
 
-	for _, b := range bukus {
-		fmt.Println("Title:", b.Judul)
-	}
+	bookRepository.Create(buku)
 
 	// CREATE
 	// buku := book.Buku{}
