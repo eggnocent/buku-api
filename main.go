@@ -22,13 +22,25 @@ func main() {
 	db.AutoMigrate(&book.Buku{})
 	fmt.Println("Database berhasil terkoneksi")
 
+	bookRepository := book.NewRepository(db)
+
+	bukus, err := bookRepository.FindAll()
+	if err != nil {
+		fmt.Println("Error retrieving books:", err)
+		return
+	}
+
+	for _, b := range bukus {
+		fmt.Println("Title:", b.Judul)
+	}
+
 	// CREATE
 	// buku := book.Buku{}
-	// buku.Judul = "kipas angin kesedot sampah"
-	// buku.Harga = 250000
+	// buku.Judul = "kucing langit"
+	// buku.Harga = 280000
 	// buku.Diskon = 11
-	// buku.Rating = 5
-	// buku.Deskripsi = "baguy"
+	// buku.Rating = 55
+	// buku.Deskripsi = "baguy bangay"
 
 	// err = db.Create((&buku)).Error
 	// if err != nil {
@@ -67,20 +79,20 @@ func main() {
 	// }
 
 	// DELETE
-	var buku book.Buku
-	err = db.Debug().Where("id = ?", 1).First(&buku).Error
-	if err != nil {
-		fmt.Println("========================")
-		fmt.Println("gagal mengupdate data")
-		fmt.Println("========================")
-	}
+	// var buku book.Buku
+	// err = db.Debug().Where("id = ?", 1).First(&buku).Error
+	// if err != nil {
+	// 	fmt.Println("========================")
+	// 	fmt.Println("gagal menemukan data")
+	// 	fmt.Println("========================")
+	// }
 
-	err = db.Delete(&buku).Error
-	if err != nil {
-		fmt.Println("========================")
-		fmt.Println("gagal menghapus data")
-		fmt.Println("========================")
-	}
+	// err = db.Delete(&buku).Error
+	// if err != nil {
+	// 	fmt.Println("========================")
+	// 	fmt.Println("gagal menghapus data")
+	// 	fmt.Println("========================")
+	// }
 
 	router := gin.Default()
 
