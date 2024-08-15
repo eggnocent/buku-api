@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -52,8 +53,8 @@ func queryHandler(ctx *gin.Context) {
 }
 
 type BukuInput struct {
-	Judul string `json:"judul" binding:"required"`
-	Harga int    `json:"harga" binding:"required,number"`
+	Judul string      `json:"judul" binding:"required"`
+	Harga json.Number `json:"harga" binding:"required,number"`
 }
 
 func createBukuHandler(ctx *gin.Context) {
@@ -61,12 +62,16 @@ func createBukuHandler(ctx *gin.Context) {
 
 	err := ctx.ShouldBindJSON(&BukuInput)
 	if err != nil {
-		for _, e := range err.(validator.ValidationErrors) {
-			errorMessage := fmt.Sprintf("error on fiel %s, condition: %s", e.Field(), e.ActualTag())
-			ctx.JSON(http.StatusBadRequest, errorMessage)
-			return
-		}
 
+		errorMessages := []string{}
+		for _, e := range err.(validator.ValidationErrors) {
+			errorMessage := fmt.Sprintf("error on field %s, condition: %s", e.Field(), e.ActualTag())
+			errorMessages = append(errorMessages, errorMessage)
+		}
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"errors": errorMessages,
+		})
+		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"judul": BukuInput.Judul,
