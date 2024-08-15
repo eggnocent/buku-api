@@ -21,6 +21,21 @@ func main() {
 	}
 	db.AutoMigrate(&book.Buku{})
 	fmt.Println("Database berhasil terkoneksi")
+
+	buku := book.Buku{}
+	buku.Judul = "kucing langit"
+	buku.Harga = 100000
+	buku.Diskon = 10
+	buku.Rating = 5
+	buku.Deskripsi = "baguy"
+
+	err = db.Create((&buku)).Error
+	if err != nil {
+		fmt.Println("========================")
+		fmt.Println("sukses menambahkan data")
+		fmt.Println("========================")
+	}
+
 	router := gin.Default()
 
 	v1 := router.Group("/v1")
