@@ -8,6 +8,7 @@ type Buku struct {
 	Karya     string
 	Deskripsi string
 	Harga     int
+	Diskon    int
 	Rating    int
 	CreateAt  time.Time
 	UpdateAt  time.Time

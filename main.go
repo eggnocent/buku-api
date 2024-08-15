@@ -1,6 +1,7 @@
 package main
 
 import (
+	"buku-api/book"
 	"buku-api/handler"
 	"fmt"
 	"log"
@@ -13,12 +14,12 @@ import (
 func main() {
 
 	dsn := "egiwira:12345@tcp(127.0.0.1:3306)/bookstore?charset=utf8mb4&parseTime=True&loc=Local"
-	_, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal("DB connection error")
 	}
-
+	db.AutoMigrate(&book.Buku{})
 	fmt.Println("Database berhasil terkoneksi")
 	router := gin.Default()
 
