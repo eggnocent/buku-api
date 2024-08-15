@@ -41,11 +41,6 @@ func bukuHandler(ctx *gin.Context) {
 	})
 }
 
-type BukuInput struct {
-	Judul string
-	Harga int
-}
-
 func queryHandler(ctx *gin.Context) {
 	judul := ctx.Query("judul")
 	harga := ctx.Query("harga")
@@ -53,6 +48,12 @@ func queryHandler(ctx *gin.Context) {
 		"judul": judul,
 		"harga": harga,
 	})
+}
+
+type BukuInput struct {
+	Judul     string
+	Harga     int
+	Sub_Judul string `json:"sub_judul"`
 }
 
 func createBukuHandler(ctx *gin.Context) {
@@ -63,7 +64,8 @@ func createBukuHandler(ctx *gin.Context) {
 		log.Fatal(err)
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"judul": BukuInput.Judul,
-		"harga": BukuInput.Harga,
+		"judul":     BukuInput.Judul,
+		"harga":     BukuInput.Harga,
+		"sub_judul": BukuInput.Sub_Judul,
 	})
 }
