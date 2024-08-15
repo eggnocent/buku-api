@@ -42,7 +42,7 @@ func QueryHandler(ctx *gin.Context) {
 }
 
 func CreateBukuHandler(ctx *gin.Context) {
-	var BukuInput book.BukuInput
+	var BukuInput book.BukuRequest
 
 	err := ctx.ShouldBindJSON(&BukuInput)
 	if err != nil {

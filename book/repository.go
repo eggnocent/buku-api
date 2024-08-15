@@ -6,7 +6,7 @@ import (
 
 type Repository interface {
 	FindAll() ([]Buku, error)
-	FindByID(ID int) ([]Buku, error)
+	FindByID(id int) (Buku, error)
 	Create(buku Buku) (Buku, error)
 }
 
@@ -24,10 +24,9 @@ func (r *repository) FindAll() ([]Buku, error) {
 	return bukus, err
 }
 
-func (r *repository) FindByID(id int) (Buku, error) {
+func (r *repository) FindByID(ID int) (Buku, error) {
 	var buku Buku
-
-	err := r.db.Find(&buku, id).Error
+	err := r.db.First(&buku, ID).Error // Menggunakan First untuk mengambil satu buku
 	return buku, err
 }
 

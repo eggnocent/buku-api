@@ -23,6 +23,7 @@ func main() {
 	fmt.Println("Database berhasil terkoneksi")
 
 	bookRepository := book.NewRepository(db)
+	bookService := book.NewService(bookRepository)
 
 	// FIND ALL
 	// bukus, err := bookRepository.FindAll()
@@ -40,15 +41,20 @@ func main() {
 
 	// fmt.Println("Judul: ", bukus.Judul)
 
-	buku := book.Buku{
-		Judul:     "Dengarkan Tanah",
-		Deskripsi: "dari dongker",
-		Harga:     120000,
-		Rating:    4,
-		Diskon:    10,
-	}
+	// buku := book.Buku{
+	// 	Judul:     "Dengarkan Tanah",
+	// 	Deskripsi: "dari dongker",
+	// 	Harga:     120000,
+	// 	Rating:    4,
+	// 	Diskon:    10,
+	// }
 
-	bookRepository.Create(buku)
+	//bookRepository.Create(buku)
+	bookRequest := book.BukuRequest{
+		Judul: "Tuhan di reruntuhan kota",
+		Harga: "160000",
+	}
+	bookService.Create(bookRequest)
 
 	// CREATE
 	// buku := book.Buku{}
