@@ -1,9 +1,12 @@
 package handler
 
 import (
+	"buku-api/book"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 func RootHandler(ctx *gin.Context) {
@@ -35,5 +38,27 @@ func QueryHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"judul": judul,
 		"harga": harga,
+	})
+}
+
+func CreateBukuHandler(ctx *gin.Context) {
+	var BukuInput book.BukuInput
+
+	err := ctx.ShouldBindJSON(&BukuInput)
+	if err != nil {
+
+		errorMessages := []string{}
+		for _, e := range err.(validator.ValidationErrors) {
+			errorMessage := fmt.Sprintf("error on field %s, condition: %s", e.Field(), e.ActualTag())
+			errorMessages = append(errorMessages, errorMessage)
+		}
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"errors": errorMessages,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"judul": BukuInput.Judul,
+		"harga": BukuInput.Harga,
 	})
 }
