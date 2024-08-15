@@ -42,26 +42,29 @@ func main() {
 	// err = db.First(&buku).Error
 	// if err != nil {
 	// 	fmt.Println("========================")
-	// 	fmt.Println("gagal mengambil data")
+	// 	fmt.Println("gagal menambahkan data")
 	// 	fmt.Println("========================")
 	// }
 
 	// fmt.Println("Judul: ", buku.Judul)
 	// fmt.Printf("objek buku %v", buku)
 
-	// READ LAST
+	// UPDATE
 	var buku book.Buku
-	err = db.Last(&buku).Error
+	err = db.Debug().Where("id = ?", 1).First(&buku).Error
 	if err != nil {
 		fmt.Println("========================")
-		fmt.Println("gagal mengambil data:", err) // Cetak error detail
+		fmt.Println("gagal mengupdate data")
 		fmt.Println("========================")
-		return
 	}
 
-	fmt.Println("Judul: ", buku.Judul)
-	fmt.Printf("objek buku: %+v\n", buku)
-
+	buku.Judul = "resep warung cah bagus"
+	err = db.Save(&buku).Error
+	if err != nil {
+		fmt.Println("========================")
+		fmt.Println("gagal mengupdate data")
+		fmt.Println("========================")
+	}
 	router := gin.Default()
 
 	v1 := router.Group("/v1")
