@@ -51,8 +51,8 @@ func main() {
 
 	//bookRepository.Create(buku)
 	bookRequest := book.BukuRequest{
-		Judul: "Tuhan di reruntuhan kota",
-		Harga: "160000",
+		Judul: "Merusak Kebahagiaan",
+		Harga: "200000",
 	}
 	bookService.Create(bookRequest)
 
