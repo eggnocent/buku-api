@@ -2,11 +2,24 @@ package main
 
 import (
 	"buku-api/handler"
+	"fmt"
+	"log"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func main() {
+
+	dsn := "egiwira:12345@tcp(127.0.0.1:3306)/bookstore?charset=utf8mb4&parseTime=True&loc=Local"
+	_, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		log.Fatal("DB connection error")
+	}
+
+	fmt.Println("Database berhasil terkoneksi")
 	router := gin.Default()
 
 	v1 := router.Group("/v1")
