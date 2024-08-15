@@ -50,6 +50,23 @@ func main() {
 	// fmt.Printf("objek buku %v", buku)
 
 	// UPDATE
+	// var buku book.Buku
+	// err = db.Debug().Where("id = ?", 1).First(&buku).Error
+	// if err != nil {
+	// 	fmt.Println("========================")
+	// 	fmt.Println("gagal mengupdate data")
+	// 	fmt.Println("========================")
+	// }
+
+	// buku.Judul = "resep warung cah bagus"
+	// err = db.Save(&buku).Error
+	// if err != nil {
+	// 	fmt.Println("========================")
+	// 	fmt.Println("gagal mengupdate data")
+	// 	fmt.Println("========================")
+	// }
+
+	// DELETE
 	var buku book.Buku
 	err = db.Debug().Where("id = ?", 1).First(&buku).Error
 	if err != nil {
@@ -58,13 +75,13 @@ func main() {
 		fmt.Println("========================")
 	}
 
-	buku.Judul = "resep warung cah bagus"
-	err = db.Save(&buku).Error
+	err = db.Delete(&buku).Error
 	if err != nil {
 		fmt.Println("========================")
-		fmt.Println("gagal mengupdate data")
+		fmt.Println("gagal menghapus data")
 		fmt.Println("========================")
 	}
+
 	router := gin.Default()
 
 	v1 := router.Group("/v1")
