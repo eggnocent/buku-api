@@ -40,9 +40,10 @@ func bukuHandler(ctx *gin.Context) {
 }
 
 func queryHandler(ctx *gin.Context) {
-	title := ctx.Query("title")
-
+	judul := ctx.Query("judul")
+	harga := ctx.Query("harga")
 	ctx.JSON(http.StatusOK, gin.H{
-		"title": title,
+		"judul": judul,
+		"harga": harga,
 	})
 }
