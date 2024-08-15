@@ -1,10 +1,11 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 func main() {
@@ -51,9 +52,8 @@ func queryHandler(ctx *gin.Context) {
 }
 
 type BukuInput struct {
-	Judul     string
-	Harga     int
-	Sub_Judul string `json:"sub_judul"`
+	Judul string `json:"judul" binding:"required"`
+	Harga int    `json:"harga" binding:"required,number"`
 }
 
 func createBukuHandler(ctx *gin.Context) {
@@ -61,11 +61,15 @@ func createBukuHandler(ctx *gin.Context) {
 
 	err := ctx.ShouldBindJSON(&BukuInput)
 	if err != nil {
-		log.Fatal(err)
+		for _, e := range err.(validator.ValidationErrors) {
+			errorMessage := fmt.Sprintf("error on fiel %s, condition: %s", e.Field(), e.ActualTag())
+			ctx.JSON(http.StatusBadRequest, errorMessage)
+			return
+		}
+
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"judul":     BukuInput.Judul,
-		"harga":     BukuInput.Harga,
-		"sub_judul": BukuInput.Sub_Judul,
+		"judul": BukuInput.Judul,
+		"harga": BukuInput.Harga,
 	})
 }
