@@ -2,7 +2,7 @@ package book
 
 type Service interface {
 	FindAll() ([]Buku, error)
-	FindByID(ID int) ([]Buku, error)
+	FindByID(ID int) (Buku, error) // Mengembalikan Buku, bukan []Buku
 	Create(buku BukuRequest) (Buku, error)
 }
 
@@ -15,24 +15,18 @@ func NewService(repository Repository) *service {
 }
 
 func (s *service) FindAll() ([]Buku, error) {
-	buku, err := s.repository.FindAll()
-	return buku, err
-	//return s.repository.FindAll() // cara simple
+	return s.repository.FindAll()
 }
 
-func (s *service) FindByID(ID int) (Buku, error) {
-	buku, err := s.repository.FindByID(ID)
-	return buku, err
+func (s *service) FindByID(ID int) (Buku, error) { // Mengembalikan Buku
+	return s.repository.FindByID(ID)
 }
 
 func (s *service) Create(bukuRequest BukuRequest) (Buku, error) {
-
 	harga, _ := bukuRequest.Harga.Int64()
-
 	buku := Buku{
 		Judul: bukuRequest.Judul,
 		Harga: int(harga),
 	}
-	newBuku, err := s.repository.Create(buku)
-	return newBuku, err
+	return s.repository.Create(buku)
 }

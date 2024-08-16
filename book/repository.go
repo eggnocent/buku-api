@@ -24,9 +24,9 @@ func (r *repository) FindAll() ([]Buku, error) {
 	return bukus, err
 }
 
-func (r *repository) FindByID(ID int) (Buku, error) {
+func (r *repository) FindByID(ID int) (Buku, error) { // Mengembalikan Buku
 	var buku Buku
-	err := r.db.First(&buku, ID).Error // Menggunakan First untuk mengambil satu buku
+	err := r.db.First(&buku, ID).Error
 	return buku, err
 }
 

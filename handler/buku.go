@@ -9,21 +9,29 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func RootHandler(ctx *gin.Context) {
+type bukuHandler struct {
+	bookService book.Service
+}
+
+func NewBookHandler(bookService book.Service) *bukuHandler {
+	return &bukuHandler{bookService}
+}
+
+func (handler *bukuHandler) RootHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"nama": "M Iksan",
 		"bio":  "pemain sepakbola asal haiti",
 	})
 }
 
-func FactHandler(ctx *gin.Context) {
+func (handler *bukuHandler) FactHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"funfact":         "Bisa melakukan dribbling dengan mata kaki",
 		"makanan favorit": "tengkleng pak bayu",
 	})
 }
 
-func BukuHandler(ctx *gin.Context) {
+func (handler *bukuHandler) BukuHandler(ctx *gin.Context) {
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	ctx.JSON(http.StatusOK, gin.H{
@@ -32,7 +40,7 @@ func BukuHandler(ctx *gin.Context) {
 	})
 }
 
-func QueryHandler(ctx *gin.Context) {
+func (handler *bukuHandler) QueryHandler(ctx *gin.Context) {
 	judul := ctx.Query("judul")
 	harga := ctx.Query("harga")
 	ctx.JSON(http.StatusOK, gin.H{
@@ -41,12 +49,11 @@ func QueryHandler(ctx *gin.Context) {
 	})
 }
 
-func CreateBukuHandler(ctx *gin.Context) {
+func (handler *bukuHandler) CreateBukuHandler(ctx *gin.Context) {
 	var BukuInput book.BukuRequest
 
 	err := ctx.ShouldBindJSON(&BukuInput)
 	if err != nil {
-
 		errorMessages := []string{}
 		for _, e := range err.(validator.ValidationErrors) {
 			errorMessage := fmt.Sprintf("error on field %s, condition: %s", e.Field(), e.ActualTag())

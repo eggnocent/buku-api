@@ -24,7 +24,7 @@ func main() {
 
 	bookRepository := book.NewRepository(db)
 	bookService := book.NewService(bookRepository)
-
+	bookHandler := handler.NewBookHandler(bookService)
 	// FIND ALL
 	// bukus, err := bookRepository.FindAll()
 	// if err != nil {
@@ -50,11 +50,11 @@ func main() {
 	// }
 
 	//bookRepository.Create(buku)
-	bookRequest := book.BukuRequest{
-		Judul: "Merusak Kebahagiaan",
-		Harga: "200000",
-	}
-	bookService.Create(bookRequest)
+	// bookRequest := book.BukuRequest{
+	// 	Judul: "Merusak Kebahagiaan",
+	// 	Harga: "200000",
+	// }
+	// bookService.Create(bookRequest)
 
 	// CREATE
 	// buku := book.Buku{}
@@ -120,11 +120,11 @@ func main() {
 
 	v1 := router.Group("/v1")
 
-	v1.GET("/", handler.RootHandler)
-	v1.GET("/fact", handler.FactHandler)
-	v1.GET("/buku/:id/:title", handler.BukuHandler)
-	v1.GET("/query", handler.QueryHandler)
-	v1.POST("/buku", handler.CreateBukuHandler)
+	v1.GET("/", bookHandler.RootHandler)
+	v1.GET("/fact", bookHandler.FactHandler)
+	v1.GET("/buku/:id/:title", bookHandler.BukuHandler)
+	v1.GET("/query", bookHandler.QueryHandler)
+	v1.POST("/buku", bookHandler.CreateBukuHandler)
 
 	router.Run()
 }
