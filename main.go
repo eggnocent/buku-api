@@ -123,6 +123,7 @@ func main() {
 	v1.GET("/buku/:id/:title", bookHandler.BukuHandler)
 	v1.GET("/query", bookHandler.QueryHandler)
 	v1.GET("/bukus", bookHandler.GetBuku)
+	v1.GET("/bukus/:id", bookHandler.GetBukus)
 	v1.POST("/buku", bookHandler.CreateBukuHandler)
 
 	router.Run()

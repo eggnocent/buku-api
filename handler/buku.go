@@ -4,6 +4,7 @@ import (
 	"buku-api/book"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -22,8 +23,35 @@ func (h *bukuHandler) GetBuku(ctx *gin.Context) {
 		return
 	}
 
+	var bukusResponse []book.BukuResponse
+
+	for _, buku := range buku {
+		bukuResponse := convertToBukuResponse(buku)
+		bukusResponse = append(bukusResponse, bukuResponse)
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{
-		"data": buku,
+		"data": bukusResponse,
+	})
+}
+
+func (h *bukuHandler) GetBukus(ctx *gin.Context) {
+	idString := ctx.Param("id")
+	id, _ := strconv.Atoi(idString)
+
+	buku, err := h.bookService.FindByID(id)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"errors": err.Error(),
+		})
+		return
+	}
+
+	bukuResponse := convertToBukuResponse(buku)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": bukuResponse,
 	})
 }
 
@@ -90,4 +118,15 @@ func (h *bukuHandler) QueryHandler(ctx *gin.Context) {
 		"judul": judul,
 		"harga": harga,
 	})
+}
+
+func convertToBukuResponse(buku book.Buku) book.BukuResponse {
+	return book.BukuResponse{
+		ID:        buku.ID,
+		Judul:     buku.Judul,
+		Harga:     buku.Harga,
+		Deskripsi: buku.Deskripsi,
+		Rating:    buku.Rating,
+		Diskon:    buku.Diskon,
+	}
 }
