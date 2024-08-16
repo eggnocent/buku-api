@@ -25,8 +25,12 @@ func (s *service) FindByID(ID int) (Buku, error) { // Mengembalikan Buku
 func (s *service) Create(bukuRequest BukuRequest) (Buku, error) {
 	harga, _ := bukuRequest.Harga.Int64()
 	buku := Buku{
-		Judul: bukuRequest.Judul,
-		Harga: int(harga),
+		Judul:     bukuRequest.Judul,
+		Karya:     bukuRequest.Karya,
+		Harga:     int(harga),
+		Deskripsi: bukuRequest.Deskripsi,
+		Rating:    bukuRequest.Rating,
+		Diskon:    bukuRequest.Diskon,
 	}
 	return s.repository.Create(buku)
 }

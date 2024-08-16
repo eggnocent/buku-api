@@ -17,21 +17,21 @@ func NewBookHandler(bookService book.Service) *bukuHandler {
 	return &bukuHandler{bookService}
 }
 
-func (handler *bukuHandler) RootHandler(ctx *gin.Context) {
+func (h *bukuHandler) RootHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"nama": "M Iksan",
 		"bio":  "pemain sepakbola asal haiti",
 	})
 }
 
-func (handler *bukuHandler) FactHandler(ctx *gin.Context) {
+func (h *bukuHandler) FactHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"funfact":         "Bisa melakukan dribbling dengan mata kaki",
 		"makanan favorit": "tengkleng pak bayu",
 	})
 }
 
-func (handler *bukuHandler) BukuHandler(ctx *gin.Context) {
+func (h *bukuHandler) BukuHandler(ctx *gin.Context) {
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	ctx.JSON(http.StatusOK, gin.H{
@@ -40,7 +40,7 @@ func (handler *bukuHandler) BukuHandler(ctx *gin.Context) {
 	})
 }
 
-func (handler *bukuHandler) QueryHandler(ctx *gin.Context) {
+func (h *bukuHandler) QueryHandler(ctx *gin.Context) {
 	judul := ctx.Query("judul")
 	harga := ctx.Query("harga")
 	ctx.JSON(http.StatusOK, gin.H{
@@ -49,10 +49,10 @@ func (handler *bukuHandler) QueryHandler(ctx *gin.Context) {
 	})
 }
 
-func (handler *bukuHandler) CreateBukuHandler(ctx *gin.Context) {
-	var BukuInput book.BukuRequest
+func (h *bukuHandler) CreateBukuHandler(ctx *gin.Context) {
+	var BukuRequest book.BukuRequest
 
-	err := ctx.ShouldBindJSON(&BukuInput)
+	err := ctx.ShouldBindJSON(&BukuRequest)
 	if err != nil {
 		errorMessages := []string{}
 		for _, e := range err.(validator.ValidationErrors) {
@@ -64,8 +64,16 @@ func (handler *bukuHandler) CreateBukuHandler(ctx *gin.Context) {
 		})
 		return
 	}
+
+	book, err := h.bookService.Create(BukuRequest)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"errors": err,
+		})
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{
-		"judul": BukuInput.Judul,
-		"harga": BukuInput.Harga,
+		"data": book,
 	})
 }
