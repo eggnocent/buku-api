@@ -12,12 +12,10 @@ import (
 )
 
 func main() {
-
 	dsn := "egiwira:12345@tcp(127.0.0.1:3306)/bookstore?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
 	if err != nil {
-		log.Fatal("DB connection error")
+		log.Fatal("DB connection error:", err)
 	}
 	db.AutoMigrate(&book.Buku{})
 	fmt.Println("Database berhasil terkoneksi")
@@ -124,6 +122,7 @@ func main() {
 	v1.GET("/fact", bookHandler.FactHandler)
 	v1.GET("/buku/:id/:title", bookHandler.BukuHandler)
 	v1.GET("/query", bookHandler.QueryHandler)
+	v1.GET("/bukus", bookHandler.GetBuku)
 	v1.POST("/buku", bookHandler.CreateBukuHandler)
 
 	router.Run()
