@@ -80,7 +80,7 @@ func (h *bukuHandler) CreateBukuHandler(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"data": book,
+		"data": convertToBukuResponse(book),
 	})
 }
 
@@ -111,7 +111,27 @@ func (h *bukuHandler) UpdateBukuHandler(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"data": book,
+		"data": convertToBukuResponse(book),
+	})
+}
+
+func (h *bukuHandler) DeleteBukuHandler(ctx *gin.Context) {
+	idString := ctx.Param("id")
+	id, _ := strconv.Atoi(idString)
+
+	buku, err := h.bookService.Delete(id)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"errors": err.Error(),
+		})
+		return
+	}
+
+	bukuResponse := convertToBukuResponse(buku)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": bukuResponse,
 	})
 }
 

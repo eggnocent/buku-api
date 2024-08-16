@@ -127,5 +127,6 @@ func main() {
 	v1.GET("/bukus/:id", bookHandler.GetBukus)
 	v1.POST("/buku", bookHandler.CreateBukuHandler)
 	v1.PUT("/bukus/:id", bookHandler.UpdateBukuHandler)
+	v1.DELETE("/bukus/:id", bookHandler.DeleteBukuHandler)
 	router.Run()
 }

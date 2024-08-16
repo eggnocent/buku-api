@@ -5,6 +5,7 @@ type Service interface {
 	FindByID(ID int) (Buku, error)
 	Create(buku BukuRequest) (Buku, error)
 	Update(ID int, bukuRequest BukuRequest) (Buku, error) // Ubah dari 'Int' menjadi 'int'
+	Delete(ID int) (Buku, error)
 }
 
 type service struct {
@@ -55,6 +56,21 @@ func (s *service) Update(ID int, bukuRequest BukuRequest) (Buku, error) {
 
 	// Simpan perubahan ke repository
 	updatedBook, err := s.repository.Update(book)
+	if err != nil {
+		return Buku{}, err
+	}
+
+	return updatedBook, nil
+}
+
+func (s *service) Delete(ID int) (Buku, error) {
+	// Temukan buku berdasarkan ID
+	book, err := s.repository.FindByID(ID)
+	if err != nil {
+		return Buku{}, err
+	}
+
+	updatedBook, err := s.repository.Delete(book)
 	if err != nil {
 		return Buku{}, err
 	}
