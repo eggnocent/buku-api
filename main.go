@@ -23,6 +23,7 @@ func main() {
 	bookRepository := book.NewRepository(db)
 	bookService := book.NewService(bookRepository)
 	bookHandler := handler.NewBookHandler(bookService)
+
 	// FIND ALL
 	// bukus, err := bookRepository.FindAll()
 	// if err != nil {
@@ -125,6 +126,6 @@ func main() {
 	v1.GET("/bukus", bookHandler.GetBuku)
 	v1.GET("/bukus/:id", bookHandler.GetBukus)
 	v1.POST("/buku", bookHandler.CreateBukuHandler)
-
+	v1.PUT("/bukus/:id", bookHandler.UpdateBukuHandler)
 	router.Run()
 }
